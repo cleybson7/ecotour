@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recife - EcoTour</title>
     <link rel="stylesheet" href="../styles.css" />
+    <script src="../js/media-upload.js" defer></script>
   </head>
+
   <body>
     <header class="header">
       <nav class="nav">
@@ -89,6 +91,7 @@
               <input type="email" id="email" name="email" required />
             </div>
   
+            //estrelas de avaliação do usuário
             <div class="form-group">
               <label for="rating">Avaliação:</label>
               <div class="star-rating">
@@ -103,6 +106,26 @@
                 <input type="radio" id="star1" name="rating" value="1" />
                 <label for="star1" title="1 estrela">★</label>
               </div>
+            </div>
+
+            //fotos e vídeos
+            <div class="form-group">
+              <label for="media">Fotos e Vídeos:</label>
+              <div class="media-upload-container" id="mediaDropzone">
+                <div class="media-upload-placeholder">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/>
+                    <path d="M16 5V3"/>
+                    <path d="M8 9l4 4 4-4"/>
+                    <path d="M12 13v-8"/>
+                  </svg>
+                  <p>Arraste e solte suas fotos e vídeos aqui ou</p>
+                  <label for="media" class="media-upload-button">Escolher Arquivos</label>
+                </div>
+                <input type="file" id="media" name="media" accept="image/*,video/*" multiple class="media-input" />
+                <div id="mediaPreview" class="media-preview"></div>
+              </div>
+              <small class="form-text">Você pode selecionar múltiplas fotos e vídeos</small>
             </div>
   
             <div class="form-group">
