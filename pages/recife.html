@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recife - EcoTour</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../js/media-upload.js" defer></script>
+  </head>
+
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <div class="logo">EcoTour</div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="#" class="active">Destinos</a></li>
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="details-main">
+      <div class="destination-details">
+        <div class="destination-image">
+          <img
+            src="https://media.gettyimages.com/id/1370008167/photo/recife-pernambuco.jpg?s=612x612&w=0&k=20&c=XOaQ2N6pcTVR3J4jKseBFq5ndKh9mxBwLcXq5l0zyJk="
+            alt="Recife - Vista da Cidade"
+          />
+        </div>
+
+        <div class="destination-info">
+          <h1>Recife - A Veneza Brasileira</h1>
+          <div class="destination-meta">
+            <span class="location">Localização: Pernambuco, Brasil</span>
+            <span class="duration">Duração Recomendada: 5 dias</span>
+            <span class="difficulty">Nível de Aventura: Fácil</span>
+          </div>
+
+          <div class="destination-description">
+            <h2>Sobre o Destino</h2>
+            <p>
+              Recife, conhecida como a "Veneza Brasileira" devido aos seus
+              diversos canais e pontes, é uma cidade que combina história,
+              cultura e belezas naturais. Com suas praias urbanas, centro
+              histórico preservado e rica gastronomia, oferece uma experiência
+              única aos visitantes.
+            </p>
+
+            <h2>Principais Atrações</h2>
+            <ul class="attractions-list">
+              <li>Marco Zero - Centro histórico e cultural da cidade</li>
+              <li>
+                Praia de Boa Viagem - Famosa praia urbana com piscinas naturais
+              </li>
+              <li>Instituto Ricardo Brennand - Museu com acervo medieval</li>
+              <li>Recife Antigo - Bairro histórico com arquitetura colonial</li>
+              <li>Alto da Sé - Vista panorâmica de Olinda</li>
+            </ul>
+
+            <h2>Melhor Época para Visitar</h2>
+            <p>
+              O clima em Recife é tropical, com temperaturas agradáveis durante
+              todo o ano. A melhor época para visitar é entre setembro e março,
+              quando as chuvas são menos frequentes e você pode aproveitar
+              melhor as praias e atrações ao ar livre.
+            </p>
+
+            <h2>Dicas de Viagem</h2>
+            <ul class="travel-tips">
+              <li>
+                Experimente a culinária local, especialmente os frutos do mar
+              </li>
+              <li>Visite o Paço do Frevo, patrimônio cultural da UNESCO</li>
+              <li>Faça um passeio de catamarã pelos rios da cidade</li>
+              <li>Participe de um tour histórico em Olinda</li>
+              <li>Aproveite o artesanato local no Mercado de São José</li>
+            </ul>
+          </div>
+        </div>
+
+        <form class="comment-form">
+            <div class="form-group">
+              <label for="name">Nome:</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+  
+            <div class="form-group">
+              <label for="email">E-mail:</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+  
+            <!-- estrelas de avaliação do usuário -->
+            <div class="form-group">
+              <label for="rating">Avaliação:</label>
+              <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5" title="5 estrelas">★</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 estrelas">★</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 estrelas">★</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 estrelas">★</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 estrela">★</label>
+              </div>
+            </div>
+
+            <!-- fotos e vídeos -->
+            <div class="form-group">
+              <label for="media">Fotos e Vídeos:</label>
+              <div class="media-upload-container" id="mediaDropzone">
+                <div class="media-upload-placeholder">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/>
+                    <path d="M16 5V3"/>
+                    <path d="M8 9l4 4 4-4"/>
+                    <path d="M12 13v-8"/>
+                  </svg>
+                  <p>Arraste e solte suas fotos e vídeos aqui ou selecione</p>
+                  <label for="media" class="media-upload-button">Escolher Arquivos</label>
+                </div>
+                <input type="file" id="media" name="media" accept="image/*,video/*" multiple class="media-input" />
+                <div id="mediaPreview" class="media-preview"></div>
+              </div>
+              <small class="form-text">Você pode selecionar múltiplas fotos e vídeos</small>
+            </div>
+  
+            <!-- Comentário -->
+            <div class="form-group">
+              <label for="comment">Comentário:</label>
+              <textarea id="comment" name="comment" rows="4" required></textarea>
+            </div>
+  
+            <button type="submit" class="btn">Enviar Comentário</button>
+          </form>
+
+        <div class="reviews-section">
+          <h2>Avaliações dos Visitantes</h2>
+          <div class="comment">
+            <div class="comment-header">
+              <span class="comment-author">Marina Costa</span>
+              <div class="comment-rating">★★★★★</div>
+            </div>
+            <p class="comment-text">
+              Recife é incrível! A mistura de história e modernidade é
+              fascinante. O passeio pelo centro histórico e as praias são
+              imperdíveis.
+            </p>
+            <span class="comment-date">20/03/2024</span>
+          </div>
+
+          <div class="comment">
+            <div class="comment-header">
+              <span class="comment-author">Pedro Almeida</span>
+              <div class="comment-rating">★★★★</div>
+            </div>
+            <p class="comment-text">
+              Cidade maravilhosa, rica em cultura e história. A gastronomia é
+              excepcional e as pessoas são muito acolhedoras.
+            </p>
+            <span class="comment-date">15/03/2024</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2024 EcoTour. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>

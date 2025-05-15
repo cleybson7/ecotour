@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salvador - EcoTour</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../js/media-upload.js" defer></script>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <div class="logo">EcoTour</div>
+        <ul class="nav-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="#" class="active">Destinos</a></li>
+          <li><a href="#">Sobre</a></li>
+          <li><a href="#">Contato</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="details-main">
+      <div class="destination-details">
+        <div class="destination-image">
+          <img
+            src="https://imgs.search.brave.com/r6nejf7cTXIlcah_6K43TGsQ-w6H_JzLSJQmgKv8hVg/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTcw/MDU0OTA5L3Bob3Rv/L3NhbHZhZG9yLWJh/aGlhLSVDQyU4MXMt/Y2FwaXRhbC5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9bmk3/UXFZNEdYV25uR2FL/ZWpfZHcyemtRR2hl/OWV4X3dNX1d3S0dL/LTZGST0"
+            alt="Salvador - Pelourinho"
+          />
+        </div>
+
+        <div class="destination-info">
+          <h1>Salvador - Terra da Alegria</h1>
+          <div class="destination-meta">
+            <span class="location">Localização: Bahia, Brasil</span>
+            <span class="duration">Duração Recomendada: 6 dias</span>
+            <span class="difficulty">Nível de Aventura: Fácil</span>
+          </div>
+
+          <div class="destination-description">
+            <h2>Sobre o Destino</h2>
+            <p>
+              Salvador, primeira capital do Brasil, é uma cidade que encanta por
+              sua rica história, cultura afro-brasileira vibrante e arquitetura
+              colonial. Com suas praias deslumbrantes, festas populares e
+              gastronomia única, oferece uma experiência cultural incomparável.
+            </p>
+
+            <h2>Principais Atrações</h2>
+            <ul class="attractions-list">
+              <li>Pelourinho - Centro histórico patrimônio da UNESCO</li>
+              <li>Igreja do Senhor do Bonfim - Famosa pelas fitinhas</li>
+              <li>Elevador Lacerda - Ícone arquitetônico da cidade</li>
+              <li>Praia do Porto da Barra - Uma das mais belas do Brasil</li>
+              <li>Mercado Modelo - Centro de artesanato e cultura</li>
+            </ul>
+
+            <h2>Melhor Época para Visitar</h2>
+            <p>
+              Salvador tem clima tropical, com temperaturas agradáveis o ano
+              todo. O período entre setembro e março é ideal para visitar, com
+              menos chuvas e eventos culturais importantes, incluindo o famoso
+              Carnaval em fevereiro.
+            </p>
+
+            <h2>Dicas de Viagem</h2>
+            <ul class="travel-tips">
+              <li>Experimente a culinária baiana, especialmente o acarajé</li>
+              <li>Assista a uma apresentação de capoeira no Pelourinho</li>
+              <li>Participe de um tour pelo centro histórico</li>
+              <li>Visite o Solar do Unhão e o Museu de Arte Moderna</li>
+              <li>Faça um passeio de escuna pela Baía de Todos os Santos</li>
+            </ul>
+          </div>
+        </div>
+
+        <form class="comment-form">
+            <div class="form-group">
+              <label for="name">Nome:</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+  
+            <div class="form-group">
+              <label for="email">E-mail:</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+  
+            <div class="form-group">
+              <label for="rating">Avaliação:</label>
+              <div class="star-rating">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5" title="5 estrelas">★</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="4 estrelas">★</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="3 estrelas">★</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="2 estrelas">★</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="1 estrela">★</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="media">Fotos e Vídeos:</label>
+              <div class="media-upload-container" id="mediaDropzone">
+                <div class="media-upload-placeholder">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/>
+                    <path d="M16 5V3"/>
+                    <path d="M8 9l4 4 4-4"/>
+                    <path d="M12 13v-8"/>
+                  </svg>
+                  <p>Arraste e solte suas fotos e vídeos aqui ou selecione</p>
+                  <label for="media" class="media-upload-button">Escolher Arquivos</label>
+                </div>
+                <input type="file" id="media" name="media" accept="image/*,video/*" multiple class="media-input" />
+                <div id="mediaPreview" class="media-preview"></div>
+              </div>
+              <small class="form-text">Você pode selecionar múltiplas fotos e vídeos</small>
+            </div>
+  
+            <div class="form-group">
+              <label for="comment">Comentário:</label>
+              <textarea id="comment" name="comment" rows="4" required></textarea>
+            </div>
+  
+            <button type="submit" class="btn">Enviar Comentário</button>
+          </form>
+
+        <div class="reviews-section">
+          <h2>Avaliações dos Visitantes</h2>
+          <div class="comment">
+            <div class="comment-header">
+              <span class="comment-author">Fernanda Lima</span>
+              <div class="comment-rating">★★★★★</div>
+            </div>
+            <p class="comment-text">
+              Salvador é mágica! A energia da cidade, a música, a comida e o
+              povo fazem dessa cidade um lugar único. O Pelourinho é imperdível!
+            </p>
+            <span class="comment-date">22/03/2024</span>
+          </div>
+
+          <div class="comment">
+            <div class="comment-header">
+              <span class="comment-author">Ricardo Oliveira</span>
+              <div class="comment-rating">★★★★★</div>
+            </div>
+            <p class="comment-text">
+              Cidade incrível! A cultura afro-brasileira, a arquitetura colonial
+              e as praias formam uma combinação perfeita. A gastronomia é
+              excepcional!
+            </p>
+            <span class="comment-date">16/03/2024</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2024 EcoTour. Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>
