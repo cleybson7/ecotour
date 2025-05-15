@@ -1,251 +1,287 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-import time
-import os
+from selenium import webdriver                            # Importa o módulo webdriver do Selenium, que permite controlar o browser via código
+from selenium.webdriver.chrome.service import Service    # Importa a classe Service, usada para especificar o executável do ChromeDriver
+from webdriver_manager.chrome import ChromeDriverManager  # Importa o gerenciador automático de versão do ChromeDriver
+from selenium.webdriver.common.by import By               # Importa o enum By, que ajuda a localizar elementos (ID, XPATH, CSS etc.)
+import time                                               # Importa o módulo time para usar sleep() e pausar o script
+import os                                                 # Importa o módulo os para manipulação de caminhos e arquivos
 
-# Caminho absoluto para o arquivo HTML
+# Caminho absoluto para o arquivo HTML de Recife (não usado diretamente, mas ilustrativo)
 caminho_html = 'C:/Users/cleyb/Documents/ecotour/pages/recife.html'
 
+# Caminho absoluto para a página inicial (index.html)
 url_home = 'C:/Users/cleyb/Documents/ecotour/index.html'
-# Iniciar o Chrome 
+
+# Inicia o Chrome, instalando/configurando automaticamente o ChromeDriver
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 
-# Abrir o HTML local
+# Abre a página inicial local no navegador
 driver.get(url_home)
 
-# Encontrar e clicar no botão 'Saiba mais' de Recife
-time.sleep(3)  # Aguardar carregamento da página
-botao_recife = driver.find_element(By.XPATH, "//h3[contains(text(), 'Recife')]/following-sibling::a[contains(@class, 'btn')]")
-botao_recife.click()
-
-# Verificar se a navegação foi bem-sucedida
-time.sleep(3)  # Aguardar carregamento da nova página
+# --- NAVEGAÇÃO PARA RECIFE ---
+time.sleep(3)  # Espera 3 segundos para garantir que a página carregou
+botao_recife = driver.find_element(
+    By.XPATH,
+    "//h3[contains(text(), 'Recife')]/following-sibling::a[contains(@class, 'btn')]"
+)  # Localiza o botão "Saiba mais" de Recife via XPath
+botao_recife.click()  # Clica no botão de Recife
+time.sleep(3)  # Espera o carregamento da nova página
+# Verifica se a URL atual contém 'recife.html' e imprime resultado
 if 'recife.html' in driver.current_url:
     print("Navegação para a página de Recife bem-sucedida!")
 else:
     print(f"Falha na navegação. URL atual: {driver.current_url}")
 
-# Função para rolagem suave
+# --- FUNÇÕES DE ROLAGEM ---
+
 def rolar_suavemente(driver, destino='fim', pixels=None):
+    """
+    Rola a página de forma suave.
+    Se destino=='fim', rola até o fim da página.
+    Se pixels for número, rola até essa quantidade de pixels.
+    """
     if destino == 'fim':
         altura_total = driver.execute_script("return document.body.scrollHeight")
         altura_atual = 0
         while altura_atual < altura_total:
-            altura_atual += 30  # Reduzido ainda mais para movimento mais suave
+            altura_atual += 30
             driver.execute_script(f"window.scrollTo(0, {altura_atual});")
-            time.sleep(0.8)  # Aumentado para movimento mais lento na página inicial
+            time.sleep(0.8)
     elif pixels:
         altura_atual = 0
         while altura_atual < pixels:
-            altura_atual += 40  # Aumentado para movimento mais rápido
+            altura_atual += 40
             driver.execute_script(f"window.scrollTo(0, {altura_atual});")
-            time.sleep(0.3)  # Reduzido para movimento mais rápido na página de destino
+            time.sleep(0.3)
 
 def rolar_ate_elemento(driver, elemento):
-    # Obtém a posição do elemento e a posição atual da rolagem
-    posicao = elemento.location['y']
-    altura_atual = driver.execute_script("return window.pageYOffset")
-    # Rola suavemente até o elemento a partir da posição atual
+    """
+    Rola a página até que o elemento especificado esteja visível na viewport.
+    """
+    posicao = elemento.location['y']                             # Pega a coordenada Y do elemento
+    altura_atual = driver.execute_script("return window.pageYOffset")  # Posição atual da rolagem
     while altura_atual < posicao:
-        altura_atual += 40
+        altura_atual += 40                                        # Incremento de 40px por vez
         driver.execute_script(f"window.scrollTo(0, {altura_atual});")
         time.sleep(0.3)
 
-# Localizar o primeiro campo do formulário (nome)
+# --- PREENCHIMENTO DO FORMULÁRIO DE RECIFE ---
+
+# Localiza o campo "nome" pelo ID
 nome_input = driver.find_element(By.ID, "name")
-
-# Rolar diretamente para o primeiro campo
-rolar_ate_elemento(driver, nome_input)
-time.sleep(2)
-
-# Preencher o campo nome
+rolar_ate_elemento(driver, nome_input)  # Rola até o campo de nome
+time.sleep(2)                            # Espera para animar/garantir visibilidade
 try:
-    nome_input.send_keys("João Silva")
+    nome_input.send_keys("José PlayTV")  # Digita "José PlayTV" no campo nome
     print("Campo nome preenchido com sucesso!")
 except Exception as e:
     print(f"Erro ao preencher o campo nome: {str(e)}")
-
 time.sleep(2)
 
-# Preencher o campo email
+# Localiza o campo "email" pelo ID e preenche
 try:
     email_input = driver.find_element(By.ID, "email")
     rolar_ate_elemento(driver, email_input)
     time.sleep(2)
-    email_input.send_keys("joao.silva@email.com")
+    email_input.send_keys("jose.playtv@email.com")
     print("Campo email preenchido com sucesso!")
 except Exception as e:
     print(f"Erro ao preencher o campo email: {str(e)}")
-
 time.sleep(2)
 
-# Selecionar avaliação
+# Seleciona 4 estrelas na avaliação via JavaScript
 try:
-    # Usar JavaScript para clicar no radio button de 4 estrelas
-    # Os inputs são listados na ordem: star5, star4, star3, star2, star1
-    # Para selecionar 4 estrelas (id="star4"), é o segundo elemento (índice 1)
     driver.execute_script("""
         var stars = document.querySelectorAll('.star-rating input[type="radio"]');
-        if (stars.length > 1) { // star4 é o segundo elemento
-            stars[1].click(); // Clica em star4
+        if (stars.length > 1) {
+            stars[1].click();    // Clica no segundo input (star4)
             stars[1].checked = true;
         }
     """)
     print("Avaliação selecionada com sucesso!")
 except Exception as e:
     print(f"Erro ao selecionar a avaliação: {str(e)}")
-
 time.sleep(2)
 
-# Upload de arquivo
+# Upload de imagem para Recife
 try:
-    # Criar caminho absoluto para a imagem no diretório do projeto
-    imagem_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "imagem_recife.jpg")
-    
-    # Verificar se o arquivo existe
+    # Monta o caminho absoluto da imagem em relação a este script
+    imagem_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./images/imagem_recife.jpg")
     if not os.path.exists(imagem_path):
         print(f"Arquivo não encontrado: {imagem_path}")
-        # Criar um arquivo de texto vazio como fallback
         with open(imagem_path, 'w') as f:
-            f.write('')
-    
-    # Localizar e interagir com o elemento de upload
-    file_input = driver.find_element(By.ID, "media") # Corrigido o ID para 'media'
-    # O input de arquivo já é visível ou não precisa ser tornado visível para send_keys funcionar em muitos casos
-    # Se ainda houver problemas, a linha abaixo pode ser descomentada:
-    # driver.execute_script("arguments[0].style.display = 'block'; arguments[0].style.visibility = 'visible'; arguments[0].style.height = '1px'; arguments[0].style.width = '1px'; arguments[0].style.opacity = 1;", file_input)
-    file_input.send_keys(imagem_path)
+            f.write('')  # Cria arquivo vazio como fallback
+    file_input = driver.find_element(By.ID, "media")  # Localiza o input de arquivo
+    file_input.send_keys(imagem_path)                 # Envia o arquivo para upload
     print("Arquivo enviado com sucesso!")
 except Exception as e:
     print(f"Erro ao enviar o arquivo: {str(e)}")
-
 time.sleep(2)
 
-# Preencher comentário
+# Preenche o comentário
 try:
     comment_input = driver.find_element(By.ID, "comment")
     rolar_ate_elemento(driver, comment_input)
     time.sleep(2)
-    comment_input.send_keys("Recife é uma cidade incrível! A arquitetura histórica, as praias e a culinária local são fantásticas. Recomendo muito a visita ao Marco Zero e ao Recife Antigo.")
+    comment_input.send_keys(
+        "Recife é uma cidade incrível! A arquitetura histórica, as praias e a culinária local são fantásticas. "
+        "Recomendo muito a visita ao Marco Zero e ao Recife Antigo."
+    )
     print("Comentário preenchido com sucesso!")
 except Exception as e:
     print(f"Erro ao preencher o comentário: {str(e)}")
 
-# Clicar no botão de enviar
+# Clica no botão de submit para enviar o formulário
 submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
 submit_button.click()
+time.sleep(3)
 
-time.sleep(3)  # Aguardar o processamento do formulário
-
-# Clicar no link Home para voltar à página principal
+# Clica no link "Home" para voltar à página inicial
 home_link = driver.find_element(By.XPATH, "//a[text()='Home']")
 home_link.click()
+time.sleep(3)
 
-time.sleep(3)  # Aguardar o carregamento da página inicial
-
-# Verificar se voltou para a página inicial
+# Verifica se voltou para 'index.html'
 if 'index.html' in driver.current_url:
     print("Retorno para a página inicial bem-sucedido!")
 else:
     print(f"Falha ao retornar para a página inicial. URL atual: {driver.current_url}")
 
-# Formas de encontrar o elemento html
-'''
-usuario = driver.find_element(By.ID, "usuario")
-#driver.find_element(By.NAME, "usuario")
-#driver.find_element(By.TAG_NAME, "input")
-#driver.find_element(By.CSS_SELECTOR, "#usuario")  
-senha = driver.find_element(By.ID, "senha")
-
-h1 = driver.find_element(By.TAG_NAME, "h1").text
-if h1 == "Login":
-    print("H1 tem escrito login")
-else:
-    print (f'H1 TEM ESCRITO {h1}')
-'''
 time.sleep(3)
 
-'''
-#funções do selenium
-time.sleep(1)
-# Digita o nome de usuário
-usuario.send_keys("admin")
-# Digita a senha
-senha.send_keys("123")
-time.sleep(3)
-# Limpa o campo de usuário
-usuario.clear()
-# Digita novamente
-usuario.send_keys("Pamella")
-# Clica no botão de login
-driver.find_element(By.ID, "btnLogin").click()
+# --- FLUXO PARA NATAL (mesma lógica de Recife, mas com dados de Natal) ---
+try:
+    botao_natal = driver.find_element(
+        By.XPATH,
+        "//h3[contains(text(), 'Natal')]/following-sibling::a[contains(@class, 'btn')]"
+    )
+    botao_natal.click()
+    time.sleep(3)
+    if 'natal.html' in driver.current_url:
+        print("Navegação para a página de Natal bem-sucedida!")
+    else:
+        print(f"Falha na navegação para Natal. URL atual: {driver.current_url}")
 
-
-# driver.current_url retorna a url
-if driver.current_url == url_home:
-    print("Redirecionamento bem-sucedido!")
-else:
-    print(f"Redirecionamento falhou. URL atual: {driver.current_url}")
-
-time.sleep(5)
-
-
-# Verifica se a página carregou e encontra a caixa de seleção pelo ID
-checkbox = driver.find_element(By.ID, "aceite")
-
-# Verifica o estado da caixa de seleção (se está desmarcada inicialmente)
-if not checkbox.is_selected():
-    print("A caixa de seleção não está marcada inicialmente. Marcando agora...")
-    checkbox.click()  # Marca a caixa de seleção
-
-# Verifica se a caixa foi marcada com sucesso
-if checkbox.is_selected():
-    print("A caixa de seleção foi marcada com sucesso!")
-else:
-    print("Falha ao marcar a caixa de seleção.")
-   
-   
-
-# Encontrar todas as caixas de seleção pelo nome
-checkboxes = driver.find_elements(By.NAME, "interesses")
-
-# Marcar todas as caixas de seleção
-for checkbox in checkboxes:
-    if not checkbox.is_selected():
-        checkbox.click()
-
-# Verificar se todas as caixas de seleção estão marcadas
-for checkbox in checkboxes:
-    assert checkbox.is_selected(), "Uma das caixas de seleção não foi marcada."
-
-    
-time.sleep(3)
- 
-
-usuarios = [
-    {"usuario": "admin", "senha": "123"},
-    {"usuario": "user1", "senha": "senhaerrada"},
-    {"usuario": "user2", "senha": "123"},
-    {"usuario": "user3", "senha": ""}
-]
-
-for user in usuarios:
-    usuario.send_keys(user["usuario"])
-    senha.send_keys(user["senha"])
+    # Preenchimento de nome e email
+    nome_input = driver.find_element(By.ID, "name")
+    rolar_ate_elemento(driver, nome_input)
+    nome_input.send_keys("Maria Souza")
     time.sleep(2)
-    usuario.clear()
-    senha.clear()
 
-driver.find_element(By.ID, "btnLogin").click()
-time.sleep(2)
-    # Aqui você pode verificar a URL ou mensagem de erro conforme necessário
-if 'home.html' in driver.current_url:
-        print(f"Login bem-sucedido para {user['usuario']}")
-else:
-        print(f"Erro no login para {user['usuario']}")
-'''
+    email_input = driver.find_element(By.ID, "email")
+    rolar_ate_elemento(driver, email_input)
+    email_input.send_keys("maria.souza@email.com")
+    time.sleep(2)
 
-# Fechar o navegador
+    # Seleciona 3 estrelas (star3)
+    driver.execute_script("""
+        var stars = document.querySelectorAll('.star-rating input[type="radio"]');
+        if (stars.length > 2) {
+            stars[2].click();
+            stars[2].checked = true;
+        }
+    """)
+    time.sleep(2)
+
+    # Upload de imagem para Natal
+    imagem_path_natal = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./images/imagem_natal.jpg")
+    if not os.path.exists(imagem_path_natal):
+        print(f"Arquivo não encontrado: {imagem_path_natal}")
+        with open(imagem_path_natal, 'w') as f:
+            f.write('')
+    file_input = driver.find_element(By.ID, "media")
+    file_input.send_keys(imagem_path_natal)
+    time.sleep(2)
+
+    # Comentário para Natal
+    comment_input = driver.find_element(By.ID, "comment")
+    rolar_ate_elemento(driver, comment_input)
+    comment_input.send_keys(
+        "Natal é maravilhosa! As dunas e praias são espetaculares. Passeio de buggy imperdível!"
+    )
+    time.sleep(4)
+
+    # Envio e retorno ao Home
+    submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    submit_button.click()
+    time.sleep(3)
+    home_link = driver.find_element(By.XPATH, "//a[text()='Home']")
+    home_link.click()
+    time.sleep(3)
+
+    if 'index.html' in driver.current_url:
+        print("Retorno para a página inicial após Natal bem-sucedido!")
+    else:
+        print(f"Falha ao retornar após Natal. URL atual: {driver.current_url}")
+except Exception as e:
+    print(f"Erro no fluxo de Natal: {str(e)}")
+
+# --- FLUXO PARA SALVADOR (mesma lógica com dados de Salvador) ---
+try:
+    botao_salvador = driver.find_element(
+        By.XPATH,
+        "//h3[contains(text(), 'Salvador')]/following-sibling::a[contains(@class, 'btn')]"
+    )
+    botao_salvador.click()
+    time.sleep(3)
+
+    if 'salvador.html' in driver.current_url:
+        print("Navegação para a página de Salvador bem-sucedida!")
+    else:
+        print(f"Falha na navegação para Salvador. URL atual: {driver.current_url}")
+
+    nome_input = driver.find_element(By.ID, "name")
+    rolar_ate_elemento(driver, nome_input)
+    time.sleep(2)
+    nome_input.send_keys("Carlos Oliveira")
+
+    email_input = driver.find_element(By.ID, "email")
+    rolar_ate_elemento(driver, email_input)
+    time.sleep(2)
+    email_input.send_keys("carlos.oliveira@email.com")
+
+    # Seleciona 1 estrela (star1) — o quinto input
+    driver.execute_script("""
+        var stars = document.querySelectorAll('.star-rating input[type="radio"]');
+        if (stars.length > 4) {
+            stars[4].click();
+            stars[4].checked = true;
+        }
+    """)
+    time.sleep(2)
+
+    # Upload de imagem para Salvador
+    imagem_path_salvador = os.path.join(os.path.dirname(os.path.abspath(__file__)), "./images/imagem_salvador.jpg")
+    if not os.path.exists(imagem_path_salvador):
+        print(f"Arquivo não encontrado: {imagem_path_salvador}")
+        with open(imagem_path_salvador, 'w') as f:
+            f.write('')
+    file_input = driver.find_element(By.ID, "media")
+    file_input.send_keys(imagem_path_salvador)
+    time.sleep(2)
+
+    # Comentário para Salvador
+    comment_input = driver.find_element(By.ID, "comment")
+    rolar_ate_elemento(driver, comment_input)
+    time.sleep(2)
+    comment_input.send_keys(
+        "Salvador tem uma energia única! Cultura, música e praias incríveis. Recomendo o Pelourinho!"
+    )
+    time.sleep(4)
+
+    # Envia e retorna ao home
+    submit_button = driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
+    submit_button.click()
+    time.sleep(3)
+    home_link = driver.find_element(By.XPATH, "//a[text()='Home']")
+    home_link.click()
+    time.sleep(3)
+
+    if 'index.html' in driver.current_url:
+        print("Retorno para a página inicial após Salvador bem-sucedido!")
+    else:
+        print(f"Falha ao retornar após Salvador. URL atual: {driver.current_url}")
+except Exception as e:
+    print(f"Erro no fluxo de Salvador: {str(e)}")
+
+# Fecha o navegador e encerra o WebDriver
 driver.quit()
